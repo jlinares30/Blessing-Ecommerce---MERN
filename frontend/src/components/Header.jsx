@@ -3,7 +3,7 @@ export function Header() {
   return (
     <header className="bg-danger text-white py-3">
       <div className="container d-flex justify-content-between align-items-center">
-        <h1 className="h3 font-weight-bold mb-0">Blessing</h1>
+        <h1 className="h1 font-weight-bold mb-0" style={{fontFamily: 'Great Vibes', fontStyle: 'cursive'}}>Blessing</h1>
         <nav>
           <ul className="nav">
             <li className="nav-item">

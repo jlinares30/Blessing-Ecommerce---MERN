@@ -1,0 +1,71 @@
+body{
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+/* SIGNUP / LOGIN PAGE */
+.title-signup, .title-login{
+    color: #bb86fc;
+}
+.input-container input{
+    background-color: #333;
+    color: #e0e0e0;
+    border: 1px solid #555;
+}
+
+.input-container label{
+    color: #e0e0e0;
+}
+
+.btn-login, .btn-signup{
+    background-color: #bb86fc;
+    color: #121212;
+}
+
+.container-signup, .container-login{
+    background-color: #121212;
+}
+
+.card-signup, .card-login{
+    width: 23rem;
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+}
+
+/* styles.css */
+.comment-box {
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .comment {
+    margin-top: 1rem;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .reply-box {
+    margin-top: 0.5rem;
+    background-color: #f1f1f1;
+    padding: 0.5rem;
+    border-radius: 8px;
+  }
+  
+  .replies {
+    margin-top: 1rem;
+    padding-left: 2rem;
+  }
+  
+  .reply {
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+  }
+  
