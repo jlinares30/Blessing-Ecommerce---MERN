@@ -67,7 +67,10 @@ const ServiceDetail = () => {
 
   const handleReservation = (e) => {
     e.preventDefault();
-    // Aquí puedes agregar la lógica para enviar la reserva con `selectedDate`
+    
+
+
+    
     console.log("Reservando para:", selectedDate);
   };
   if (loading) {

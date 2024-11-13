@@ -1,11 +1,21 @@
 import axios from "axios";
+import instance from "./axios";
+import Cookies from "js-cookie";
 
-const API_URL = "http://localhost:3000/api"; // Asegúrate de que esta URL sea correcta
+const API_URL = "http://localhost:3000/api";
+
+instance.interceptors.request.use((config) => {
+  const token = Cookies.get("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 export const registerRequest = async (user) => {
   try {
     const response = await axios.post(`${API_URL}/signup`, user);
-    return response; // Devuelve la respuesta completa
+    return response; 
   } catch (error) {
     console.error("Error registering user:", error.response ? error.response.data : error.message);
     throw error;
@@ -61,6 +71,17 @@ export const salonsRequest = async () => {
     return response.data;
   } catch (error) {
     console.error("Error fetching salons:", error.response ? error.response.data : error.message);
+    throw error;
+  }
+}
+
+
+export const reservationsRequestByUser = async () => {
+  try {
+    const response = await instance.get(`/reservations`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching reservations:", error.response ? error.response.data : error.message);
     throw error;
   }
 }

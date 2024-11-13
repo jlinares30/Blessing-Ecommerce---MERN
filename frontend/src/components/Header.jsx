@@ -18,26 +18,24 @@ export function Header() {
               <Link to="/services" className="nav-link text-white">Services</Link>
             </li>
             <li className="nav-item">
-              <a href="#contact" className="nav-link text-white">Contact</a>
+              <Link to="/reservations" className="nav-link text-white">Reservations</Link>
             </li>
             <li className="nav-item">
+              <Link to="/profile" className="nav-link text-white">Profile</Link>
+            </li>
+            {/* <li className="nav-item">
               <a id="open-cart" href="#" className="nav-link text-white">
                 Carrito (<span id="cart-count">0</span>)
               </a>
-            </li>
+            </li> */}
             {isAuthenticated ? (
             <li className="nav-item">
               <LogoutButton />
             </li>
           ) : (
-            <>
               <li className="nav-item">
-                <Link className="nav-link" to="/login">Login</Link>
+                <Link className="btn btn-danger" to="/login">Login</Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/signup">Sign Up</Link>
-              </li>
-            </>
           )}
           </ul>
         </nav>
