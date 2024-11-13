@@ -4,23 +4,39 @@ import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { CardService } from "../components/CardService";
 import { mockServices } from '../mockData';
+import { servicesRequest } from '../api/auth';
 
 function ServicesPage() {
 
   const [services, setServices] = useState([]);
-  
-  // useEffect(() => {
-  //   axios.get('http://localhost:3000/services')
-  //     .then(response => {
-  //       setServices(response.data);
-  //     })
-  //     .catch(error => {
-  //         console.error("Error fetching services:", error);
-  //       });
-  //   }, []);
-    useEffect(() => {
-      setServices(mockServices);
-    }, []);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const data = await servicesRequest();
+        setServices(data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+    // useEffect(() => {
+    //   setServices(mockServices);
+    // }, []);
     return (
       <> 
         <Header />

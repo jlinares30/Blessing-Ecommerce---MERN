@@ -1,5 +1,10 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import React from "react";
+import LogoutButton from "./LogoutButton";
 export function Header() {
+
+  const { user, isAuthenticated } = useAuth();
   return (
     <header className="bg-danger text-white py-3">
       <div className="container d-flex justify-content-between align-items-center">
@@ -20,9 +25,20 @@ export function Header() {
                 Carrito (<span id="cart-count">0</span>)
               </a>
             </li>
+            {isAuthenticated ? (
             <li className="nav-item">
-              <Link id="open-modal" type="button" to="/login" className="nav-link text-white">Log in</Link>
+              <LogoutButton />
             </li>
+          ) : (
+            <>
+              <li className="nav-item">
+                <Link className="nav-link" to="/login">Login</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/signup">Sign Up</Link>
+              </li>
+            </>
+          )}
           </ul>
         </nav>
       </div>
@@ -30,3 +46,4 @@ export function Header() {
 
   );
 }
+

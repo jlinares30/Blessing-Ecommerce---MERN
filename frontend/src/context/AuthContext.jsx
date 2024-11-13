@@ -1,8 +1,9 @@
-import { createContext,useContext, useState, useEffect } from "react";
-import { registerRequest } from "../api/auth";
-import Cookies from 'js-cookie'
+import { createContext, useContext, useState, useEffect } from "react";
+import { registerRequest, loginRequest } from "../api/auth";
+import axios from "axios";
+import Cookies from 'js-cookie';
 
-
+const API_URL = "http://localhost:3000/api"; // Asegúrate de que esta URL sea correcta
 
 export const AuthContext = createContext();
 
@@ -11,60 +12,74 @@ export const useAuth = () => {
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
-    return context;
-
+  return context;
 };
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null)
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [errors, setErrors] = useState([]);
-    const signup = async (user) =>{ //Funcion para hacer registro
-        try{
-            const res = await registerRequest(user);
-            console.log(res.data)
-            setUser(res.data)
-            setIsAuthenticated(true)
-            Cookies.set('token', res.data.token)
-        } catch(error){
-            setErrors(error.response ? error.response.data : [error.message]);
-        }
+  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [errors, setErrors] = useState([]);
 
-    };
-    const signin = async (user) =>{ //Funcion para hacer login
-        try{
-            const res = await loginRequest(user);
-            console.log(res)
-            setIsAuthenticated(true)
-            setUser(res.data)
-            Cookies.set('token', res.data.token)
-        }catch(error){
-            if(Array.isArray(error.response.data)){
-                return setErrors(error.response.data)
-            }
-            setErrors([error.response.data.message])
-            console.log(error)
-        }
-    };
-    // useEffect(()=>{ //useEffect para limpiar los errores pasado 5 seg
-    //     if(errors.length > 0){
-    //         const timer = setTimeout(()=>{
-    //             setErrors([])
-    //         }, 5000)
-    //         return () => clearTimeout(timer)
-    //     }
-    // }, [errors])
+  const signup = async (user) => {
+    try {
+      const res = await registerRequest(user);
+      console.log(res.data);
+      setUser(res.data.user);
+      setIsAuthenticated(true);
+      Cookies.set('token', res.data.token); // Guardar el token en una cookie
+    } catch (error) {
+      setErrors(error.response ? error.response.data : [error.message]);
+    }
+  };
 
-    useEffect(()=>{ //useEffect para verificar si hay un token en las cookies
-        const cookies = Cookies.get()
-        if(cookies.token){
-            console.log(cookies.token)
-        }
-    },[])
+  const signin = async (user) => {
+    try {
+      const res = await loginRequest(user);
+      console.log(res.data);
+      setIsAuthenticated(true);
+      setUser(res.data.user);
+      Cookies.set('token', res.data.token); // Guardar el token en una cookie
+    } catch (error) {
+      if (Array.isArray(error.response.data)) {
+        return setErrors(error.response.data);
+      }
+      setErrors([error.response.data.message]);
+      console.log(error);
+    }
+  };
 
-    return (
-        <AuthContext.Provider value={{signup, signin, user, isAuthenticated, errors}}>
-            {children}
-        </AuthContext.Provider>
-    )
+  const logout = () => {
+    Cookies.remove('token'); // Eliminar el token de la cookie
+    setUser(null);
+    setIsAuthenticated(false);
+  };
+
+  const checkAuth = async () => {
+    const token = Cookies.get('token');
+    if (token) {
+      try {
+        const res = await axios.get(`${API_URL}/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setUser(res.data.user);
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.error("Error checking auth:", error);
+        setIsAuthenticated(false);
+        setUser(null);
+      }
+    }
+  };
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  return (
+    <AuthContext.Provider value={{ user, isAuthenticated, signup, signin, logout, errors }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
